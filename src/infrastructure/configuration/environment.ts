@@ -9,5 +9,7 @@ export const env = {
   postgres_username: process.env.POSTGRES_USERNAME,
   postgres_password: process.env.POSTGRES_PASSWORD,
   mongo_username: process.env.MONGO_USERNAME,
-  mongo_password: process.env.MONGODB_USER_PASSWORD
+  mongo_password: process.env.MONGODB_USER_PASSWORD,
+  bcrypt_password: process.env.BCRYPT_PASSWORD,
+  bcrypt_salt_rounds: process.env.SALT_ROUNDS
 };

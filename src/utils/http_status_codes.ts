@@ -1,4 +1,4 @@
-const enum StatusCodes {
+export const enum StatusCodes {
   SuccessfulGet = 200,
   SuccessfulPost = 201,
   SuccessfulPatch = 204,

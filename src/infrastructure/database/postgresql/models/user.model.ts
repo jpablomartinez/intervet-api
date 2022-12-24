@@ -1,19 +1,21 @@
 import { DataTypes, Model } from 'sequelize';
 import { Json } from 'sequelize/types/utils';
-import Address from '../../../../core/address/model';
-import User from '../../../../core/user/model';
+import IUser from '../../../../core/user/interface';
+import { UserState } from '../../../../utils/user_state';
+import { UserTypes } from '../../../../utils/user_types';
 import { sequelize } from '../db_instance';
 
-class UserModel extends Model<User> implements User {
-  public user_id!: string;
+class UserModel extends Model<IUser> implements IUser {
+  public id: string | undefined;
   public name!: string;
   public last_name!: string;
   public rut!: string;
   public email!: string;
   public phone!: string;
   public address!: Json;
-  public type!: number;
-  public user_state!: number;
+  public user_type!: UserTypes;
+  public user_state!: UserState;
+  public password!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -21,26 +23,22 @@ class UserModel extends Model<User> implements User {
 
 UserModel.init(
   {
-    user_id: {
+    id: {
       allowNull: false,
       autoIncrement: false,
       primaryKey: true,
       type: DataTypes.UUID,
       unique: true,
-      defaultValue: ''
+      defaultValue: DataTypes.UUIDV1
     },
     name: {
       allowNull: false,
-      autoIncrement: false,
-      primaryKey: false,
       type: DataTypes.STRING,
       unique: false,
       defaultValue: ''
     },
     last_name: {
       allowNull: false,
-      autoIncrement: false,
-      primaryKey: false,
       type: DataTypes.STRING,
       unique: false,
       defaultValue: DataTypes.STRING
@@ -55,16 +53,12 @@ UserModel.init(
     },
     email: {
       allowNull: false,
-      autoIncrement: false,
-      primaryKey: false,
       type: DataTypes.STRING,
       unique: true,
       defaultValue: DataTypes.STRING
     },
     phone: {
       allowNull: false,
-      autoIncrement: false,
-      primaryKey: false,
       type: DataTypes.STRING,
       unique: false,
       defaultValue: DataTypes.STRING
@@ -77,21 +71,21 @@ UserModel.init(
       unique: false,
       defaultValue: DataTypes.STRING
     },
-    type: {
+    user_type: {
       allowNull: false,
-      autoIncrement: false,
-      primaryKey: false,
-      type: DataTypes.NUMBER,
-      unique: false,
-      defaultValue: 0
+      type: DataTypes.ENUM({
+        values: ['PetOwner', 'Veterinary', 'Admin']
+      })
     },
     user_state: {
       allowNull: false,
-      autoIncrement: false,
-      primaryKey: false,
-      type: DataTypes.NUMBER,
-      unique: false,
-      defaultValue: 0
+      type: DataTypes.ENUM({
+        values: ['ToValidate', 'Active', 'Suspended', 'Deleted']
+      })
+    },
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING
     }
   },
   {

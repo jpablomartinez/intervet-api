@@ -6,7 +6,8 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import DBConnection from './infraestructure/database/db_connection';
+import DBConnection from './infrastructure/database/db_connection';
+import apiRoutes from './routes/index';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ const db = new DBConnection();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use('/api/v1', apiRoutes);
 
 /**
  * Server Activation

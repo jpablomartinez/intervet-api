@@ -3,6 +3,7 @@
         "elephantsql",
         "intervet",
         "jexylc",
-        "lastname"
+        "lastname",
+        "UUIDV"
     ]
 }

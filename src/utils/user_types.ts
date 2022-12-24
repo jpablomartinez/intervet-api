@@ -1,5 +1,5 @@
-const enum UserTypes {
-  PetOwner,
-  Veterinary,
-  Admin
+export const enum UserTypes {
+  PetOwner = 'PetOwner',
+  Veterinary = 'Veterinary',
+  Admin = 'Admin'
 }

@@ -1,6 +1,6 @@
-const enum UserState {
-  ToValidated,
-  Active,
-  Suspended,
-  Deleted
+export const enum UserState {
+  ToValidated = 'ToValidated',
+  Active = 'Active',
+  Suspended = 'Suspended',
+  Deleted = 'Deleted'
 }
