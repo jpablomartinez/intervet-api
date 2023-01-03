@@ -41,5 +41,5 @@ app.use('/api/v1', apiRoutes);
 app.listen(PORT, async () => {
   console.log(`✅ Listening on PORT ${PORT}`);
   await db.postgresConnection();
-  await db.mongoConnection();
+  //await db.mongoConnection();
 });
