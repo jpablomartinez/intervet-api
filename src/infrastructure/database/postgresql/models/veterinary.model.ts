@@ -1,20 +1,23 @@
 import { DataTypes, Model } from 'sequelize';
-import { Json } from 'sequelize/types/utils';
 import Veterinary from '../../../../core/veterinary/model';
 import { sequelize } from '../db_instance';
+import AttentionAreaModel from './attention_area.model';
+import WorkingHoursModel from './working_hours.model';
 
 class VeterinaryModel extends Model<Veterinary> implements Veterinary {
-  public vet_id!: string;
-  public contact_method!: number;
+  public vet_id?: string;
+  public name!: string;
+  public last_name!: string;
+  public rut!: string;
   public work_phone!: string;
-  public rating!: number;
+  public rating?: number;
   public about_me!: string;
   public to_home_value!: number;
   public po_to_home_value!: number;
-  public favorites_amount!: number;
-  public calculate_rating!: number;
-  public best_comment!: string;
-  public is_validated!: boolean;
+  public favorites_amount?: number;
+  public best_comment?: string;
+  public is_validated?: boolean;
+  public user_id!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -27,12 +30,28 @@ VeterinaryModel.init(
       autoIncrement: false,
       primaryKey: true,
       type: DataTypes.UUID,
-      unique: true
+      unique: true,
+      defaultValue: DataTypes.UUIDV1
     },
-    contact_method: {
+    name: {
       allowNull: false,
-      type: DataTypes.NUMBER,
-      defaultValue: 0
+      type: DataTypes.STRING,
+      unique: false,
+      defaultValue: ''
+    },
+    last_name: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      unique: false,
+      defaultValue: DataTypes.STRING
+    },
+    rut: {
+      allowNull: false,
+      autoIncrement: false,
+      primaryKey: false,
+      type: DataTypes.STRING,
+      unique: true,
+      defaultValue: DataTypes.STRING
     },
     work_phone: {
       allowNull: true,
@@ -41,7 +60,7 @@ VeterinaryModel.init(
     },
     rating: {
       allowNull: true,
-      type: DataTypes.NUMBER,
+      type: DataTypes.DECIMAL,
       defaultValue: 0
     },
     about_me: {
@@ -50,22 +69,17 @@ VeterinaryModel.init(
     },
     to_home_value: {
       allowNull: false,
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       defaultValue: 0
     },
     po_to_home_value: {
       allowNull: false,
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       defaultValue: 0
     },
     favorites_amount: {
       allowNull: true,
-      type: DataTypes.NUMBER,
-      defaultValue: 0
-    },
-    calculate_rating: {
-      allowNull: true,
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       defaultValue: 0
     },
     best_comment: {
@@ -84,5 +98,10 @@ VeterinaryModel.init(
     sequelize
   }
 );
+
+VeterinaryModel.hasMany(WorkingHoursModel, {foreignKey: 'vet_id'});
+WorkingHoursModel.belongsTo(VeterinaryModel, {foreignKey: 'vet_id'});
+VeterinaryModel.hasMany(AttentionAreaModel, {foreignKey: 'vet_id'});
+AttentionAreaModel.belongsTo(VeterinaryModel, {foreignKey: 'vet_id'});
 
 export default VeterinaryModel;

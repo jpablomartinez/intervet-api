@@ -2,6 +2,7 @@ import mongoose, { Mongoose } from 'mongoose';
 import { Sequelize } from 'sequelize';
 import { sequelize } from './postgresql/db_instance';
 import { env } from '../configuration/environment';
+import VeterinaryModel from './postgresql/models/veterinary.model';
 
 class DBConnection {
   /**
@@ -10,6 +11,7 @@ class DBConnection {
   async postgresConnection(): Promise<Sequelize> {
     try {
       const postgres_connection = await sequelize.sync({});
+      //await VeterinaryModel.sync()
       console.log('✅ Postgres db Connection Done');
       return postgres_connection;
     } catch (err: any) {

@@ -3,5 +3,6 @@ export const enum InternalStatusCodes {
   DataNotFound = 101,
   OperationError = 102,
   QueryError = 103,
-  CatchError = 104
+  CatchError = 104,
+  AlreadyCreated = 105
 }

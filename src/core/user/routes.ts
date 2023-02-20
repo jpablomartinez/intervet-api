@@ -7,6 +7,5 @@ router.post('/', UserController.create);
 router.get('/', UserController.getByParams);
 router.get('/:id', UserController.getUserById);
 router.patch('/:id', UserController.updateUser);
-router.patch('/modify/:id', UserController.ModifyUserAccount);
 
 export default router;

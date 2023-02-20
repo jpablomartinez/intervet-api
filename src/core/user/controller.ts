@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { request } from 'http';
 import { where, WhereOptions } from 'sequelize';
 import { Json } from 'sequelize/types/utils';
+import AuthModel from '../../infrastructure/database/postgresql/models/authentication.model';
 import UserModel from '../../infrastructure/database/postgresql/models/user.model';
 import { StatusCodes } from '../../utils/http_status_codes';
 import { InternalStatusCodes } from '../../utils/internal_status_codes';
@@ -25,28 +26,33 @@ class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const data: User = req.body;
-      const hashValue = await encryptPassword(data['password']);
-      const response = await UserModel.create({
+      const data = req.body;
+      console.log(data);
+      const hashValue: string = await encryptPassword(data['password']);
+      const user: UserModel = await UserModel.create({
         name: data['name'],
         last_name: data['last_name'],
         rut: data['rut'],
-        email: data['email'],
         phone: data['phone'],
-        address: data['address'],
-        user_type: UserTypes.PetOwner,
-        user_state: UserState.Active,
-        password: hashValue
+        address: data['address']
       });
-      console.log(response);
+      if (user) {
+        await AuthModel.create({
+          auth_id: user.user_id,
+          email: data['email'],
+          password: hashValue,
+          user_type: UserTypes.PetOwner,
+          user_state: UserState.ToValidated
+        });
+      }
       res
         .status(StatusCodes.SuccessfulPost)
-        .json({ status: 'data create', data: true });
+        .json({ status: InternalStatusCodes.OperationSuccessful });
     } catch (error: any) {
+      console.log(error);
       res
         .status(StatusCodes.BadRequest)
-        .json({ status: InternalStatusCodes.QueryError });
-      console.log(error);
+        .json({ status: InternalStatusCodes.QueryError, error: error });
       next(error);
     }
   }
@@ -73,8 +79,8 @@ class UserController {
       } = await UserModel.findAndCountAll({
         order: [['createdAt', 'ASC']],
         where: {
-          user_type: _userType,
-          user_state: _userState,
+          //user_type: _userType,
+          //user_state: _userState,
           name: {
             [Op.iLike]: `${name}%`
           }
@@ -137,19 +143,19 @@ class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const id: string = (req.params.id as string) ?? '';
+      const user_id: string = (req.params.id as string) ?? '';
       const user: UserClass = req.body;
       await UserModel.update(
         {
           name: user.name,
           last_name: user.last_name,
           rut: user.rut,
-          email: user.email,
+          //email: user.email,
           phone: user.phone,
           address: user.address
         },
         {
-          where: { id: id }
+          where: { user_id: user_id }
         }
       );
       res.status(StatusCodes.SuccessfulPatch).json({
@@ -172,13 +178,13 @@ class UserController {
     try {
       const _userState: UserState = getUserStateByString(req.body['userState']);
       if (_userState != UserState.Undefined) {
-        const id: string = (req.params.id as string) ?? '';
+        const user_id: string = (req.params.id as string) ?? '';
         await UserModel.update(
           {
-            user_state: _userState
+            //user_state: _userState
           },
           {
-            where: { id: id }
+            where: { user_id: user_id }
           }
         );
         res.status(StatusCodes.SuccessfulPatch).json({
