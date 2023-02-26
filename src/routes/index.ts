@@ -4,6 +4,9 @@ import VetRoutes from '../core/veterinary/routes';
 import VetHistoryRoutes from '../core/vets_histories/routes';
 import WorkingHourRoutes from '../core/working_hours/routes';
 import AttentionAreaRoutes from '../core/attention_area/routes';
+import ServiceRoutes from '../core/service/routes';
+import VetServicesRoutes from '../core/vet_service/routes';
+import SpecialityRoutes from '../core/speciality/routes';
 
 const router: Router = Router();
 
@@ -19,4 +22,7 @@ router.use('/vet', VetRoutes);
 router.use('/vet_history', VetHistoryRoutes);
 router.use('/working_hours', WorkingHourRoutes);
 router.use('/attention_area', AttentionAreaRoutes);
+router.use('/service', ServiceRoutes);
+router.use('/vet_services', VetServicesRoutes);
+router.use('/speciality', SpecialityRoutes);
 export default router;

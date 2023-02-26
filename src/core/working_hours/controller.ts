@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { resourceLimits } from 'worker_threads';
 import WorkingHoursModel from '../../infrastructure/database/postgresql/models/working_hours.model';
 import { StatusCodes } from '../../utils/http_status_codes';
 import { InternalStatusCodes } from '../../utils/internal_status_codes';
@@ -14,7 +13,6 @@ class WorkingHourController {
   ): Promise<void> {
     try {
       const data: WorkingHour = req.body;
-      console.log(data)      
       await WorkingHoursModel.create({
         vet_id: data.vet_id,
         start_at: data.start_at,

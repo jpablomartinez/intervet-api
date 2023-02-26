@@ -3,7 +3,7 @@ import UserModel from '../../infrastructure/database/postgresql/models/user.mode
 import { UserTypes } from '../../utils/user_types';
 
 class UserClass {
-  id?: string;
+  user_id?: string;
   name: string;
   last_name: string;
   rut: string;
@@ -11,7 +11,7 @@ class UserClass {
   address: Json;
 
   constructor(user: UserModel) {
-    this.id = user.id;
+    this.user_id = user.user_id;
     this.name = user.name;
     this.last_name = user.last_name;
     this.rut = user.rut;

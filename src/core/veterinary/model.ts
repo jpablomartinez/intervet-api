@@ -13,6 +13,7 @@ class Veterinary {
   favorites_amount?: number;
   best_comment?: string;
   is_validated?: boolean;
+  speciality?: string;
 
   constructor(
     vet_id: string,
@@ -26,7 +27,8 @@ class Veterinary {
     po_to_home_value: number,
     favorites_amount: number,
     best_comment: string,
-    is_validated: boolean
+    is_validated: boolean,
+    speciality: string
   ) {
     this.vet_id = vet_id;
     this.name = name;
@@ -40,6 +42,7 @@ class Veterinary {
     this.favorites_amount = favorites_amount;
     this.best_comment = best_comment;
     this.is_validated = is_validated;
+    this.speciality = speciality;
   }
 }
 

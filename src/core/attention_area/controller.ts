@@ -12,26 +12,30 @@ class AttentionAreasController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const data: AttentionArea = req.body;      
-      const vet_id: string = (req.params.vet_id as string) ?? '';            
+      const data: AttentionArea = req.body;
+      const vet_id: string = (req.params.vet_id as string) ?? '';
       if (data.region == 'Metropolitana de Santiago') {
         if (
           data.commune == 'Providencia' ||
           data.commune == 'Nunoa' ||
           data.commune == 'Las Condes'
-        ) {          
+        ) {
           const [object, response] = await AttentionAreaModel.findOrCreate({
-            where: {vet_id: vet_id, region: data.region, commune: data.commune}            
-          });          
-          if(response){
+            where: {
+              vet_id: vet_id,
+              region: data.region,
+              commune: data.commune
+            }
+          });
+          if (response) {
             res
               .status(StatusCodes.SuccessfulPost)
               .json({ status: InternalStatusCodes.OperationSuccessful });
           } else {
             res
               .status(StatusCodes.SuccessfulPost)
-              .json({status: InternalStatusCodes.AlreadyCreated})
-          }                           
+              .json({ status: InternalStatusCodes.AlreadyCreated });
+          }
         }
       } else {
         res
@@ -134,10 +138,10 @@ class AttentionAreasController {
           });
         }
       } else {
-          res.status(StatusCodes.BadRequest).json({
-            status: InternalStatusCodes.QueryError
-          });
-        }
+        res.status(StatusCodes.BadRequest).json({
+          status: InternalStatusCodes.QueryError
+        });
+      }
     } catch (error: any) {
       console.log(error);
       res

@@ -2,6 +2,9 @@ import { DataTypes, Model } from 'sequelize';
 import Veterinary from '../../../../core/veterinary/model';
 import { sequelize } from '../db_instance';
 import AttentionAreaModel from './attention_area.model';
+import ServiceModel from './service.model';
+import SpecialityModel from './speciality.model';
+import VetServiceModel from './vet_service.model';
 import WorkingHoursModel from './working_hours.model';
 
 class VeterinaryModel extends Model<Veterinary> implements Veterinary {
@@ -18,6 +21,7 @@ class VeterinaryModel extends Model<Veterinary> implements Veterinary {
   public best_comment?: string;
   public is_validated?: boolean;
   public user_id!: string;
+  public speciality!: string; 
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -91,6 +95,11 @@ VeterinaryModel.init(
       allowNull: false,
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    speciality: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      defaultValue: 'Medicina General'
     }
   },
   {
@@ -99,9 +108,12 @@ VeterinaryModel.init(
   }
 );
 
-VeterinaryModel.hasMany(WorkingHoursModel, {foreignKey: 'vet_id'});
-WorkingHoursModel.belongsTo(VeterinaryModel, {foreignKey: 'vet_id'});
-VeterinaryModel.hasMany(AttentionAreaModel, {foreignKey: 'vet_id'});
-AttentionAreaModel.belongsTo(VeterinaryModel, {foreignKey: 'vet_id'});
-
+VeterinaryModel.hasMany(WorkingHoursModel, { foreignKey: 'vet_id' });
+WorkingHoursModel.belongsTo(VeterinaryModel, { foreignKey: 'vet_id' });
+VeterinaryModel.hasMany(AttentionAreaModel, { foreignKey: 'vet_id' });
+AttentionAreaModel.belongsTo(VeterinaryModel, { foreignKey: 'vet_id' });
+VeterinaryModel.hasMany(VetServiceModel, {foreignKey: 'vet_id'});
+VetServiceModel.belongsTo(VeterinaryModel, {foreignKey: 'vet_id'});
+VeterinaryModel.belongsToMany(SpecialityModel, {through: 'VetSpeciality', foreignKey: 'vet_id'});
+SpecialityModel.belongsToMany(VeterinaryModel, {through: 'VetSpeciality', foreignKey: 'speciality_id'});
 export default VeterinaryModel;

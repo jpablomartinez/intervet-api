@@ -38,7 +38,7 @@ AttentionAreaModel.init(
     commune: {
       type: DataTypes.STRING,
       allowNull: false
-    },
+    }
   },
   {
     tableName: 'attention_areas',
