@@ -4,5 +4,6 @@ export const enum InternalStatusCodes {
   OperationError = 102,
   QueryError = 103,
   CatchError = 104,
-  AlreadyCreated = 105
+  AlreadyCreated = 105,
+  PasswordEmailError = 106
 }

@@ -87,21 +87,22 @@ class VetController {
       const owner_to_vet_min = req.query.owner_to_vet_min ?? 0;
       const owner_to_vet_max = req.query.owner_to_vet_max ?? 200000;
       const rating = req.query.rating ?? 0;
-      const commune:string = req.query.commune as string ?? '';
-      const service:string = req.query.service as string ?? '';
-      const speciality: string[] = (req.query.speciality as string).split(',') ?? ['Medicina General'];
-      
+      const commune: string = (req.query.commune as string) ?? '';
+      const service: string = (req.query.service as string) ?? '';
+      const speciality: string[] = (req.query.speciality as string).split(
+        ','
+      ) ?? ['Medicina General'];
+
       var whereConditionsPlace = {};
-      if (commune != ''){
+      if (commune != '') {
         whereConditionsPlace = {
-          'region': region,
-          'commune': commune
-        }
-      }
-      else {
+          region: region,
+          commune: commune
+        };
+      } else {
         whereConditionsPlace = {
-          'region': region,          
-        }
+          region: region
+        };
       }
       const page: number = req.query.page
         ? parseInt(req.query.page as string)
@@ -155,8 +156,8 @@ class VetController {
           {
             model: VetServiceModel,
             required: false,
-            attributes: ['name_service', 'price'],            
-          }                    
+            attributes: ['name_service', 'price']
+          }
         ]
       });
       res.status(StatusCodes.SuccessfulGet).json({

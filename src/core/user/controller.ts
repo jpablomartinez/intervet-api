@@ -26,8 +26,7 @@ class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const data = req.body;
-      console.log(data);
+      const data = req.body;      
       const hashValue: string = await encryptPassword(data['password']);
       const user: UserModel = await UserModel.create({
         name: data['name'],
@@ -42,7 +41,9 @@ class UserController {
           email: data['email'],
           password: hashValue,
           user_type: UserTypes.PetOwner,
-          user_state: UserState.ToValidated
+          user_state: UserState.ToValidated,
+          user_id: user.user_id!,
+          refresh_token: ''
         });
       }
       res

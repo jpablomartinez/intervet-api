@@ -8,6 +8,7 @@ class User implements IUser {
   rut: string;
   phone: string;
   address: Json;
+  
 
   constructor(
     user_id: string,

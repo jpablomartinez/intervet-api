@@ -21,7 +21,7 @@ class VeterinaryModel extends Model<Veterinary> implements Veterinary {
   public best_comment?: string;
   public is_validated?: boolean;
   public user_id!: string;
-  public speciality!: string; 
+  public speciality!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -112,8 +112,14 @@ VeterinaryModel.hasMany(WorkingHoursModel, { foreignKey: 'vet_id' });
 WorkingHoursModel.belongsTo(VeterinaryModel, { foreignKey: 'vet_id' });
 VeterinaryModel.hasMany(AttentionAreaModel, { foreignKey: 'vet_id' });
 AttentionAreaModel.belongsTo(VeterinaryModel, { foreignKey: 'vet_id' });
-VeterinaryModel.hasMany(VetServiceModel, {foreignKey: 'vet_id'});
-VetServiceModel.belongsTo(VeterinaryModel, {foreignKey: 'vet_id'});
-VeterinaryModel.belongsToMany(SpecialityModel, {through: 'VetSpeciality', foreignKey: 'vet_id'});
-SpecialityModel.belongsToMany(VeterinaryModel, {through: 'VetSpeciality', foreignKey: 'speciality_id'});
+VeterinaryModel.hasMany(VetServiceModel, { foreignKey: 'vet_id' });
+VetServiceModel.belongsTo(VeterinaryModel, { foreignKey: 'vet_id' });
+VeterinaryModel.belongsToMany(SpecialityModel, {
+  through: 'VetSpeciality',
+  foreignKey: 'vet_id'
+});
+SpecialityModel.belongsToMany(VeterinaryModel, {
+  through: 'VetSpeciality',
+  foreignKey: 'speciality_id'
+});
 export default VeterinaryModel;

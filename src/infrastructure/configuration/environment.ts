@@ -11,5 +11,7 @@ export const env = {
   mongo_username: process.env.MONGO_USERNAME,
   mongo_password: process.env.MONGODB_USER_PASSWORD,
   bcrypt_password: process.env.BCRYPT_PASSWORD,
-  bcrypt_salt_rounds: process.env.SALT_ROUNDS
+  bcrypt_salt_rounds: process.env.SALT_ROUNDS,
+  access_token: process.env.ACCESS_TOKEN_PASSWORD,
+  refresh_token: process.env.REFRESH_TOKEN_PASSWORD
 };

@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import ServiceController from './controller';
 
-
 const router: Router = Router();
 
 router.post('/', ServiceController.create);

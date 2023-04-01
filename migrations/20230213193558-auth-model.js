@@ -32,7 +32,7 @@ module.exports = {
           type: Sequelize.DataTypes.ENUM({
               values: ['ToValidate', 'Active', 'Suspended', 'Deleted']
           })
-      }
+      }      
     })
   },
 

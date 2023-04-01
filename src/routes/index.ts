@@ -7,6 +7,7 @@ import AttentionAreaRoutes from '../core/attention_area/routes';
 import ServiceRoutes from '../core/service/routes';
 import VetServicesRoutes from '../core/vet_service/routes';
 import SpecialityRoutes from '../core/speciality/routes';
+import AuthRoutes from '../core/auth/routes';
 
 const router: Router = Router();
 
@@ -25,4 +26,5 @@ router.use('/attention_area', AttentionAreaRoutes);
 router.use('/service', ServiceRoutes);
 router.use('/vet_services', VetServicesRoutes);
 router.use('/speciality', SpecialityRoutes);
+router.use('/auth', AuthRoutes)
 export default router;
