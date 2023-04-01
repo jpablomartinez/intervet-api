@@ -52,7 +52,7 @@ AuthModel.init(
     user_id: {
       allowNull: false,
       type: DataTypes.UUID,
-      unique: true      
+      unique: true
     },
     refresh_token: {
       allowNull: false,

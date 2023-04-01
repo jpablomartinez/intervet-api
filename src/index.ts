@@ -9,7 +9,6 @@ import helmet from 'helmet';
 import DBConnection from './infrastructure/database/db_connection';
 import apiRoutes from './routes/index';
 
-
 dotenv.config();
 
 /**
@@ -39,8 +38,8 @@ app.use('/api/v1', apiRoutes);
  * Server Activation
  */
 
-app.listen(PORT, async () => {  
-  console.log(`✅ Listening on PORT ${PORT}`);  
+app.listen(PORT, async () => {
+  console.log(`✅ Listening on PORT ${PORT}`);
   await db.postgresConnection();
   //await db.mongoConnection();
 });

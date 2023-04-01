@@ -7,5 +7,6 @@ export const enum StatusCodes {
   Forbidden = 403,
   NotFound = 404,
   ServerError = 500,
-  ServiceUnavailable = 503
+  ServiceUnavailable = 503,
+  TokenError = 403
 }

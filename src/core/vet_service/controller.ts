@@ -89,12 +89,10 @@ class VetServiceController {
       if (vet_id != '') {
         const vet = {};
         if (vet != null) {
-          res
-            .status(StatusCodes.SuccessfulGet)
-            .json({
-              status: InternalStatusCodes.OperationSuccessful,
-              result: vet
-            });
+          res.status(StatusCodes.SuccessfulGet).json({
+            status: InternalStatusCodes.OperationSuccessful,
+            result: vet
+          });
         } else {
           res
             .status(StatusCodes.SuccessfulGet)

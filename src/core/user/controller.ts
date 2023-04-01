@@ -26,7 +26,7 @@ class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const data = req.body;      
+      const data = req.body;
       const hashValue: string = await encryptPassword(data['password']);
       const user: UserModel = await UserModel.create({
         name: data['name'],

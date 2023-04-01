@@ -26,5 +26,5 @@ router.use('/attention_area', AttentionAreaRoutes);
 router.use('/service', ServiceRoutes);
 router.use('/vet_services', VetServicesRoutes);
 router.use('/speciality', SpecialityRoutes);
-router.use('/auth', AuthRoutes)
+router.use('/auth', AuthRoutes);
 export default router;

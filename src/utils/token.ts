@@ -2,30 +2,56 @@ import { env } from '../infrastructure/configuration/environment';
 
 var jwt = require('jsonwebtoken');
 
-export const authToken = async (user_id: string, user_type: string, user_status: string):Promise<string> => {
-    console.log(env.access_token)
-    console.log(env.refresh_token)
-    return await jwt.sign(
-        {
-            'user_id': user_id,
-            'user_type': user_type,
-            'user_status': user_status
-        }, 
-        env.access_token,
-        {             
-            expiresIn: '2h'
-        },    
-    );
+export interface AuthToken {
+  user_id: string;
+  user_type: string;
+  user_status: string;
 }
 
-export const refreshToken = (user_id: string) : string => {
-    return jwt.sign(
-        {
-            'user_id': user_id
-        },
-        env.refresh_token,
-        {           
-            expiresIn: '365d'
-        },
-    )
-}
+export const authToken = async (
+  user_id: string,
+  user_type: string,
+  user_status: string
+): Promise<string> => {
+  return await jwt.sign(
+    {
+      user_id: user_id,
+      user_type: user_type,
+      user_status: user_status
+    },
+    env.access_token,
+    {
+      expiresIn: '20s'
+    }
+  );
+};
+
+export const refreshToken = (user_id: string, auth_id: string): string => {
+  return jwt.sign(
+    {
+      auth_id: auth_id
+    },
+    env.refresh_token,
+    {
+      expiresIn: '365d'
+    }
+  );
+};
+
+export const validateRefreshToken = (token: string): boolean => {
+  return jwt.verify(token, env.refresh_token);
+};
+
+export const validateAccessToken = (token: string): boolean => {
+  return jwt.verify(token, env.access_token);
+};
+
+export const decodeUserIdToken = (token: string): string => {
+  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())[
+    'auth_id'
+  ];
+};
+
+export const decodeToken = (token: string): AuthToken => {
+  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+};

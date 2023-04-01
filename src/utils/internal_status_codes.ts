@@ -5,5 +5,10 @@ export const enum InternalStatusCodes {
   QueryError = 103,
   CatchError = 104,
   AlreadyCreated = 105,
-  PasswordEmailError = 106
+  PasswordEmailError = 106,
+  TokenMissing = 107,
+  TokenExpired = 108,
+  TokenNotValid = 109,
+  UserStateError = 110,
+  RefreshTokenExpired = 111
 }

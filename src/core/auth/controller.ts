@@ -1,26 +1,40 @@
 import { Request, Response, NextFunction } from 'express';
 import AuthModel from '../../infrastructure/database/postgresql/models/authentication.model';
-import UserModel from '../../infrastructure/database/postgresql/models/user.model';
 import { StatusCodes } from '../../utils/http_status_codes';
 import { InternalStatusCodes } from '../../utils/internal_status_codes';
 import { validatePassword } from '../../utils/password';
-import {authToken, refreshToken} from '../../utils/token';
+import {
+  authToken,
+  decodeUserIdToken,
+  refreshToken,
+  validateRefreshToken
+} from '../../utils/token';
+import { UserState } from '../../utils/user_state';
 
 class AuthController {
-  
   public static async login(
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<void>{
-    try{
+  ): Promise<void> {
+    try {
       const data = req.body;
-      const auth = await AuthModel.findOne({where: {email: data['email']}});      
-      if(auth != null){
-        const decrypt_password: boolean = await validatePassword(auth.password, data['password']);
-        if(decrypt_password){          
-          const token: string = await authToken(auth.user_id, auth.user_type, auth.user_state);
-          const _refresh_token: string = refreshToken(auth.user_id);
+      const auth = await AuthModel.findOne({ where: { email: data['email'] } });
+      if (auth != null) {
+        const decrypt_password: boolean = await validatePassword(
+          auth.password,
+          data['password']
+        );
+        if (decrypt_password) {
+          const token: string = await authToken(
+            auth.user_id,
+            auth.user_type,
+            auth.user_state
+          );
+          const _refresh_token: string = refreshToken(
+            auth.user_id,
+            auth.auth_id!
+          );
           AuthModel.update(
             {
               refresh_token: _refresh_token
@@ -31,27 +45,90 @@ class AuthController {
               }
             }
           );
-          res
-            .status(StatusCodes.SuccessfulPost)
-            .json({
-              status: InternalStatusCodes.OperationSuccessful,
-              data: {
-                'access_token': token,
-                'refresh_token': _refresh_token
-              }
+          res.status(StatusCodes.SuccessfulPost).json({
+            status: InternalStatusCodes.OperationSuccessful,
+            data: {
+              access_token: token,
+              refresh_token: _refresh_token
+            }
+          });
+        } else {
+          res.status(StatusCodes.SuccessfulPost).json({
+            status: InternalStatusCodes.OperationError,
+            data: {
+              message: 'Incorrect Email or Password. Try again',
+              code: InternalStatusCodes.PasswordEmailError
+            }
           });
         }
-        else {
+      }
+    } catch (error: any) {
+      console.log(error);
+      res
+        .status(StatusCodes.BadRequest)
+        .json({ status: InternalStatusCodes.QueryError });
+      next(error);
+    }
+  }
+
+  public static async refreshToken(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { refreshToken } = req.body;
+      if (!refreshToken) {
+        res
+          .status(StatusCodes.BadRequest)
+          .json({
+            status: InternalStatusCodes.QueryError,
+            message: 'Value is missing'
+          });
+      }
+      const valid: boolean = validateRefreshToken(refreshToken);
+      if (valid) {
+        const auth_id = decodeUserIdToken(refreshToken);
+        const user_auth = await AuthModel.findByPk(auth_id);
+        if (user_auth) {
+          if (
+            user_auth.user_state != UserState.Deleted &&
+            user_auth.user_state != UserState.Suspended
+          ) {
+            const new_access_token = authToken(
+              user_auth.auth_id!,
+              user_auth.user_type,
+              user_auth.user_state
+            );
+            res
+              .send(StatusCodes.SuccessfulPost)
+              .json({
+                status: InternalStatusCodes.OperationSuccessful,
+                data: { 'access-token': new_access_token }
+              });
+          } else {
+            res
+              .send(StatusCodes.Unauthorized)
+              .json({
+                status: InternalStatusCodes.UserStateError,
+                message: 'This account is suspended or deleted'
+              });
+          }
+        } else {
           res
-            .status(StatusCodes.SuccessfulPost)
+            .send(StatusCodes.SuccessfulPost)
             .json({
-                status: InternalStatusCodes.OperationError,
-                data: {
-                  'message': 'Incorrect Email or Password. Try again',
-                  'code': InternalStatusCodes.PasswordEmailError
-                }
-            })            
-        }        
+              status: InternalStatusCodes.DataNotFound,
+              message: 'User not found'
+            });
+        }
+      } else {
+        res
+          .send(StatusCodes.TokenError)
+          .json({
+            status: InternalStatusCodes.RefreshTokenExpired,
+            message: 'Refresh token expired'
+          });
       }
     } catch (error: any) {
       console.log(error);
