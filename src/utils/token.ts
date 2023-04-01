@@ -8,12 +8,12 @@ export interface AuthToken {
   user_status: string;
 }
 
-export const authToken = async (
+export const authToken = (
   user_id: string,
   user_type: string,
   user_status: string
 ): Promise<string> => {
-  return await jwt.sign(
+  return jwt.sign(
     {
       user_id: user_id,
       user_type: user_type,
@@ -26,7 +26,7 @@ export const authToken = async (
   );
 };
 
-export const refreshToken = (user_id: string, auth_id: string): string => {
+export const refreshToken = (auth_id: string): string => {
   return jwt.sign(
     {
       auth_id: auth_id

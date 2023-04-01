@@ -27,12 +27,11 @@ class AuthController {
         );
         if (decrypt_password) {
           const token: string = await authToken(
-            auth.user_id,
+            auth.auth_id!,
             auth.user_type,
             auth.user_state
           );
-          const _refresh_token: string = refreshToken(
-            auth.user_id,
+          const _refresh_token: string = refreshToken(        
             auth.auth_id!
           );
           AuthModel.update(
@@ -85,9 +84,8 @@ class AuthController {
             status: InternalStatusCodes.QueryError,
             message: 'Value is missing'
           });
-      }
-      const valid: boolean = validateRefreshToken(refreshToken);
-      if (valid) {
+      }      
+      if (validateRefreshToken(refreshToken)) {
         const auth_id = decodeUserIdToken(refreshToken);
         const user_auth = await AuthModel.findByPk(auth_id);
         if (user_auth) {
@@ -101,7 +99,7 @@ class AuthController {
               user_auth.user_state
             );
             res
-              .send(StatusCodes.SuccessfulPost)
+              .status(StatusCodes.SuccessfulPost)
               .json({
                 status: InternalStatusCodes.OperationSuccessful,
                 data: { 'access-token': new_access_token }

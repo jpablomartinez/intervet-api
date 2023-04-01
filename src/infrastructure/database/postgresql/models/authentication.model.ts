@@ -10,8 +10,7 @@ class AuthModel extends Model<Auth> implements Auth {
   public email!: string;
   public password!: string;
   public user_type!: UserTypes;
-  public user_state!: UserState;
-  public user_id!: string;
+  public user_state!: UserState;  
   public refresh_token!: string;
 
   public readonly createdAt!: Date;
@@ -48,12 +47,7 @@ AuthModel.init(
       type: DataTypes.ENUM({
         values: ['ToValidated', 'Active', 'Suspended', 'Deleted']
       })
-    },
-    user_id: {
-      allowNull: false,
-      type: DataTypes.UUID,
-      unique: true
-    },
+    },    
     refresh_token: {
       allowNull: false,
       type: DataTypes.STRING,

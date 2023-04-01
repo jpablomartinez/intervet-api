@@ -6,8 +6,7 @@ class Auth {
   email: string;
   password: string;
   user_type: UserTypes;
-  user_state: UserState;
-  user_id: string;
+  user_state: UserState;  
   refresh_token: string;
 
   constructor(
@@ -15,16 +14,14 @@ class Auth {
     email: string,
     password: string,
     user_type: UserTypes,
-    user_state: UserState,
-    user_id: string,
+    user_state: UserState,    
     refresh_token: string
   ) {
     this.auth_id = id;
     this.email = email;
     this.password = password;
     this.user_type = user_type;
-    this.user_state = user_state;
-    this.user_id = user_id;
+    this.user_state = user_state;  
     this.refresh_token = refresh_token;
   }
 }

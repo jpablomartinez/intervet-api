@@ -6,6 +6,12 @@ import { InternalStatusCodes } from '../../utils/internal_status_codes';
 import AttentionArea from './model';
 
 class AttentionAreasController {
+  /**
+   * Function that lets create attention area for a veterinary
+   * @param req 
+   * @param res 
+   * @param next 
+   */
   public static async create(
     req: Request,
     res: Response,
@@ -51,6 +57,12 @@ class AttentionAreasController {
     }
   }
 
+  /**
+   * Function that returns all attention areas for a veterinary
+   * @param req 
+   * @param res 
+   * @param next 
+   */
   public static async getAttentionAreasByVet(
     req: Request,
     res: Response,

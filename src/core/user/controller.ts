@@ -1,7 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { request } from 'http';
-import { where, WhereOptions } from 'sequelize';
-import { Json } from 'sequelize/types/utils';
 import AuthModel from '../../infrastructure/database/postgresql/models/authentication.model';
 import UserModel from '../../infrastructure/database/postgresql/models/user.model';
 import { StatusCodes } from '../../utils/http_status_codes';
@@ -10,7 +7,7 @@ import { encryptPassword } from '../../utils/password';
 import { getUserStateByString, UserState } from '../../utils/user_state';
 import { UserTypes } from '../../utils/user_types';
 import UserClass from './class';
-import User from './model';
+
 const { Op } = require('sequelize');
 
 class UserController {
@@ -41,8 +38,7 @@ class UserController {
           email: data['email'],
           password: hashValue,
           user_type: UserTypes.PetOwner,
-          user_state: UserState.ToValidated,
-          user_id: user.user_id!,
+          user_state: UserState.ToValidated,          
           refresh_token: ''
         });
       }

@@ -38,7 +38,8 @@ class VetController {
           email: data['email'],
           password: hashValue,
           user_type: UserTypes.Veterinary,
-          user_state: UserState.ToValidated
+          user_state: UserState.ToValidated,
+          refresh_token: '',          
         });
       }
       res

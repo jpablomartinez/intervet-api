@@ -4,7 +4,78 @@ import { InternalStatusCodes } from '../../utils/internal_status_codes';
 import { env } from '../configuration/environment';
 import { validateAccessToken, decodeToken, AuthToken } from '../../utils/token';
 
-class AuthMiddleware {
+class AuthMiddleware {  
+
+  public static async AllAccess (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    var token: string = req.headers['authorization']?.split(' ')[1] ?? '';
+    if(token == ''){
+      res
+        .status(StatusCodes.BadRequest)
+        .json({status: InternalStatusCodes.TokenMissing, message: 'Token is missing'});
+    } else {
+      try {
+        if(validateAccessToken(token)){
+          const { user_id, user_type, user_status }: AuthToken = decodeToken(token);
+          if(user_status != 'Deleted' && user_status != 'Suspended'){
+            next();
+          } else {
+            res
+              .status(StatusCodes.Unauthorized)
+              .json({status: InternalStatusCodes.UserStateError, message: 'Credential are not correct'});
+          }        
+        }
+      }  catch (error: any) {
+          res
+            .status(StatusCodes.BadRequest)
+            .json({
+             status: InternalStatusCodes.TokenExpired,
+             message: 'Token expired'
+           });
+      } 
+    }
+  }
+
+  public static async PublicAccessOwnerAdmin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    var token: string = req.headers['authorization']?.split(' ')[1] ?? '';
+    if(token == ''){
+      res
+        .status(StatusCodes.BadRequest)
+        .json({status: InternalStatusCodes.TokenMissing, message: 'Token is missing'});
+    }
+    else {
+      try {
+        if(validateAccessToken(token)){
+          const { user_id, user_type, user_status }: AuthToken = decodeToken(token);
+          if(
+            (user_type == 'PetOwner' && (user_status == 'Active' || user_status == 'ToValidated')) ||
+            (user_type == 'Admin' && user_status == 'Active')          
+          ){
+            next();
+          } else {
+            res
+              .status(StatusCodes.Unauthorized)
+              .json({status: InternalStatusCodes.UserStateError, message: 'Credentials are incorrect'});
+          }
+        }
+      } catch (error: any) {
+          res
+            .status(StatusCodes.BadRequest)
+            .json({
+             status: InternalStatusCodes.TokenExpired,
+             message: 'Token expired'
+           });
+      }        
+    }
+  }
+
   public static async PetOwnerAccess(
     req: Request,
     res: Response,

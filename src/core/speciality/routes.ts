@@ -7,14 +7,14 @@ const router: Router = Router();
 router.post('/', AuthMiddleware.AdminAccess, SpecialityController.create);
 router.get(
   '/',
-  AuthMiddleware.VeterinaryAllAccess,
+  AuthMiddleware.AllAccess,
   SpecialityController.getAll
 );
 router.patch(
   '/',
-  AuthMiddleware.VeterinaryAllAccess,
+  AuthMiddleware.AdminAccess,
   SpecialityController.update
 );
-router.delete('/:speciality_id', SpecialityController.delete);
+router.delete('/:speciality_id', AuthMiddleware.AdminAccess, SpecialityController.delete);
 
 export default router;

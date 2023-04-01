@@ -11,7 +11,7 @@ router.post(
 );
 router.get(
   '/',
-  AuthMiddleware.AdminAccess,
+  AuthMiddleware.PublicAccessOwnerAdmin,
   AttentionAreasController.getAttentionAreasByVet
 );
 router.patch(
