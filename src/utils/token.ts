@@ -21,7 +21,7 @@ export const authToken = (
     },
     env.access_token,
     {
-      expiresIn: '20s'
+      expiresIn: '6h'
     }
   );
 };

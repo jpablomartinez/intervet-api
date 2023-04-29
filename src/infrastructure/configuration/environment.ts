@@ -13,5 +13,6 @@ export const env = {
   bcrypt_password: process.env.BCRYPT_PASSWORD,
   bcrypt_salt_rounds: process.env.SALT_ROUNDS,
   access_token: process.env.ACCESS_TOKEN_PASSWORD,
-  refresh_token: process.env.REFRESH_TOKEN_PASSWORD
+  refresh_token: process.env.REFRESH_TOKEN_PASSWORD,
+  encrypt_value_salt_rounds: process.env.ENCRYPT_VALUE_SALT_ROUNDS
 };

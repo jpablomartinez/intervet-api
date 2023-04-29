@@ -2,6 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import { Json } from 'sequelize/types/utils';
 import IUser from '../../../../core/user/interface';
 import { sequelize } from '../db_instance';
+import VeterinaryModel from './veterinary.model';
 
 class UserModel extends Model<IUser> implements IUser {
   public user_id: string | undefined;

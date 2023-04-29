@@ -12,3 +12,9 @@ export const validatePassword = async (
 ): Promise<boolean> => {
   return await bcrypt.compare(userPassword, hashValue);
 };
+
+
+export const encryptInfo = async (value: string) : Promise<string> => {
+  return bcrypt.hash(value, parseInt(env.bcrypt_salt_rounds!));
+}
+

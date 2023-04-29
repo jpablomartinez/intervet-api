@@ -2,8 +2,9 @@ import { DataTypes, Model } from 'sequelize';
 import Veterinary from '../../../../core/veterinary/model';
 import { sequelize } from '../db_instance';
 import AttentionAreaModel from './attention_area.model';
-import ServiceModel from './service.model';
+import FavoriteVetModel from './favorite_vet_model';
 import SpecialityModel from './speciality.model';
+import UserModel from './user.model';
 import VetServiceModel from './vet_service.model';
 import WorkingHoursModel from './working_hours.model';
 
@@ -110,10 +111,13 @@ VeterinaryModel.init(
 
 VeterinaryModel.hasMany(WorkingHoursModel, { foreignKey: 'vet_id' });
 WorkingHoursModel.belongsTo(VeterinaryModel, { foreignKey: 'vet_id' });
+
 VeterinaryModel.hasMany(AttentionAreaModel, { foreignKey: 'vet_id' });
 AttentionAreaModel.belongsTo(VeterinaryModel, { foreignKey: 'vet_id' });
+
 VeterinaryModel.hasMany(VetServiceModel, { foreignKey: 'vet_id' });
 VetServiceModel.belongsTo(VeterinaryModel, { foreignKey: 'vet_id' });
+
 VeterinaryModel.belongsToMany(SpecialityModel, {
   through: 'VetSpeciality',
   foreignKey: 'vet_id'
@@ -122,4 +126,21 @@ SpecialityModel.belongsToMany(VeterinaryModel, {
   through: 'VetSpeciality',
   foreignKey: 'speciality_id'
 });
+
+UserModel.hasMany(FavoriteVetModel, {foreignKey: 'user_id'});
+FavoriteVetModel.belongsTo(UserModel, {foreignKey: 'user_id', as: 'user'});
+
+VeterinaryModel.hasMany(FavoriteVetModel, {foreignKey: 'vet_id'});
+FavoriteVetModel.belongsTo(VeterinaryModel, {foreignKey: 'vet_id', as: 'vet'});
+
+/*UserModel.belongsToMany(VeterinaryModel, {
+  through: 'FavoriteVet',
+  foreignKey: 'user_id',  
+});
+
+VeterinaryModel.belongsToMany(UserModel, {
+  through: 'FavoriteVet',
+  foreignKey: 'vet_id'
+})*/
+
 export default VeterinaryModel;

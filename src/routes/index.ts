@@ -8,6 +8,11 @@ import ServiceRoutes from '../core/service/routes';
 import VetServicesRoutes from '../core/vet_service/routes';
 import SpecialityRoutes from '../core/speciality/routes';
 import AuthRoutes from '../core/auth/routes';
+import CreditCardRoutes from '../core/credit_card/routes';
+import BankAccountRoutes from '../core/bank_account/routes';
+import PetRoutes from '../core/pet/routes';
+import AnimalRoutes from '../core/animal/routes';
+import FavoriteVetRoutes from '../core/favorite_vet/routes';
 
 const router: Router = Router();
 
@@ -27,4 +32,10 @@ router.use('/service', ServiceRoutes);
 router.use('/vet_services', VetServicesRoutes);
 router.use('/speciality', SpecialityRoutes);
 router.use('/auth', AuthRoutes);
+router.use('/credit_card', CreditCardRoutes);
+router.use('/bank_account', BankAccountRoutes);
+router.use('/pet', PetRoutes);
+router.use('/animal', AnimalRoutes);
+router.use('/favorite_vet', FavoriteVetRoutes);
+
 export default router;

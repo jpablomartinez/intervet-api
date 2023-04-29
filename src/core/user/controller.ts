@@ -174,7 +174,7 @@ class UserController {
   ): Promise<void> {
     try {
       const _userState: UserState = getUserStateByString(req.body['userState']);
-      if (_userState != UserState.Undefined) {
+      if (_userState != UserState.Undefined) {        
         const user_id: string = (req.params.id as string) ?? '';
         await UserModel.update(
           {
