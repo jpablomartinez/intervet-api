@@ -9,7 +9,9 @@ import { UserTypes } from '../../utils/user_types';
 import { UserState } from '../../utils/user_state';
 import AttentionAreaModel from '../../infrastructure/database/postgresql/models/attention_area.model';
 import VetServiceModel from '../../infrastructure/database/postgresql/models/vet_service.model';
-import ServiceModel from '../../infrastructure/database/postgresql/models/service.model';
+import AnimalModel from '../../infrastructure/database/postgresql/models/animal_model';
+import AboutVetModel from '../../infrastructure/database/postgresql/models/about_vet.model';
+import AnimalVetModel from '../../infrastructure/database/postgresql/models/animal_vet.model';
 
 const { Op } = require('sequelize');
 
@@ -33,13 +35,21 @@ class VetController {
       });
       if (veterinary != null) {
         const hashValue: string = await encryptPassword(data['password']);
-        AuthModel.create({
+        await AuthModel.create({
           auth_id: veterinary.vet_id,
           email: data['email'],
           password: hashValue,
           user_type: UserTypes.Veterinary,
           user_state: UserState.ToValidated,
           refresh_token: '',          
+        });
+        await AboutVetModel.create({
+          vet_id: veterinary.vet_id,
+          university: data['university'],
+          professional_title: data['professional_data'],
+          professional_title_url: '',
+          experience_years: data['experience_years'],
+          about_me: data['about_me']
         });
       }
       res
@@ -158,6 +168,15 @@ class VetController {
             model: VetServiceModel,
             required: false,
             attributes: ['name_service', 'price']
+          },
+          {
+            model: AboutVetModel,
+            required: true,
+            attributes: ['university', 'professional_title' ,'experience_years'],            
+          },
+          {
+            model: AnimalVetModel,
+            required: true            
           }
         ]
       });

@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import Veterinary from '../../../../core/veterinary/model';
 import { sequelize } from '../db_instance';
+import AnimalModel from './animal_model';
 import AttentionAreaModel from './attention_area.model';
 import FavoriteVetModel from './favorite_vet_model';
 import SpecialityModel from './speciality.model';
@@ -133,14 +134,17 @@ FavoriteVetModel.belongsTo(UserModel, {foreignKey: 'user_id', as: 'user'});
 VeterinaryModel.hasMany(FavoriteVetModel, {foreignKey: 'vet_id'});
 FavoriteVetModel.belongsTo(VeterinaryModel, {foreignKey: 'vet_id', as: 'vet'});
 
-/*UserModel.belongsToMany(VeterinaryModel, {
-  through: 'FavoriteVet',
-  foreignKey: 'user_id',  
+VeterinaryModel.belongsToMany(AnimalModel, {
+  through: 'AnimalVet',
+  foreignKey: 'vet_id',
+  otherKey: 'animal_id'
 });
 
-VeterinaryModel.belongsToMany(UserModel, {
-  through: 'FavoriteVet',
-  foreignKey: 'vet_id'
-})*/
+AnimalModel.belongsToMany(VeterinaryModel, {
+  through: 'AnimalVet',
+  foreignKey: 'animal_id',
+  otherKey: 'vet_id'
+});
+
 
 export default VeterinaryModel;

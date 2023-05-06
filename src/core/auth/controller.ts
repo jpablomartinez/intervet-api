@@ -86,7 +86,7 @@ class AuthController {
           });
       }      
       if (validateRefreshToken(refreshToken)) {
-        const auth_id = decodeUserIdToken(refreshToken);
+        const auth_id = decodeUserIdToken(refreshToken, 'auth_id');
         const user_auth = await AuthModel.findByPk(auth_id);
         if (user_auth) {
           if (

@@ -4,6 +4,7 @@ export const enum UserState {
   Active = 'Active',
   Suspended = 'Suspended',
   Deleted = 'Deleted',
+  Rejected = 'Rejected',
   Undefined = 'Undefined'
 }
 
@@ -14,4 +15,11 @@ export function getUserStateByString(userState: string) {
   else if (userState === 'Suspended') return UserState.Suspended;
   else if (userState === 'Deleted') return UserState.Deleted;
   else return UserState.Undefined;
+}
+
+export function isValidUserState(states: string[]){
+  for(var s of states){
+    if(s != 'ToValidated' && s != 'Active' && s != 'Suspended' && s!= 'Deleted' && s!= 'All' && s!= 'Rejected') return false;
+  }
+  return true;
 }

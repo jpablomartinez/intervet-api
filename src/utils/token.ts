@@ -46,9 +46,9 @@ export const validateAccessToken = (token: string): boolean => {
   return jwt.verify(token, env.access_token);
 };
 
-export const decodeUserIdToken = (token: string): string => {
+export const decodeUserIdToken = (token: string, key: string): string => {
   return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())[
-    'auth_id'
+    key
   ];
 };
 
